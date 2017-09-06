@@ -3,8 +3,7 @@
 RH_ASK rf;
 const int LED = 13;// indicator pin
 const int delayTime = 2000;
-const char *On_command = "1";
-const char *Off_command = "0";
+
 void setup()
 {
 //  RH_ASK(2000,11,12,10,false);
@@ -25,13 +24,18 @@ void loop()
     uint8_t buflen = sizeof(buf);
     if (rf.recv(buf, &buflen)) // Non-blocking
     {
-      if(buf[0]=='1')
-      {
-          digitalWrite(LED,1);        
-      }
-      if(buf[0]=='0')
-      {
-          digitalWrite(LED,0);        
-      }      
+      int i;
+      
+              digitalWrite(led_pin, HIGH); // Flash a light to show received good message
+        // Message with a good checksum received, print it.
+        Serial.print("Got: ");
+        
+        for (i = 0; i < buflen; i++)
+        {
+            Serial.print(buf[i], HEX);
+            Serial.print(' ');
+        }
+        Serial.println();
+              digitalWrite(led_pin, LOW);
     }
 }
